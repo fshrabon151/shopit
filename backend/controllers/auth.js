@@ -47,14 +47,48 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @desc    Get current user
 // @route   GET /api/v1/me
 // @access  private
-exports.getMe = asyncHandler(async (req, res, next) => {
+exports.getUserProfile = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
   res.status(200).json({ success: true, data: user });
 });
 
+// @desc    Update/Change password
+// @route   PUT /api/v1/password/update
+// @access  private
+
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+  //Check previous user's password
+  const isMatched = await user.comparePassword(req.body.oldPassword);
+  if (!isMatched) {
+    return next(new ErrorHandler(`Old password is incorrect`, 400));
+  }
+  user.password = req.body.password;
+  await user.save();
+  sendToken(user, 200, res);
+});
+
+// @desc    Update user profile
+// @route   PUT /api/v1/me/update
+// @access  private
+
+exports.updateProfile = asyncHandler(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+  // Update avatar : TODO
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  res.status(200).json({ sucess: true, data: user });
+});
+
 // @desc    logout user
 // @route   GET /api/v1/logout
-// @access  Public
+// @access  private
 exports.logout = asyncHandler(async (req, res, next) => {
   res.cookie('token', null, {
     expires: new Date(Date.now()),
@@ -65,7 +99,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
 // @desc    Forget password
 // @route   POST /api/v1/password/forgot
-// @access  public
+// @access  private
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -100,7 +134,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
 // @desc    Reset password
 // @route   PUT /api/v1/password/reset/:token
-// @access  public
+// @access  private
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   // Hash URL token
   const resetPasswordToken = crypto
@@ -129,4 +163,64 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordExpire = undefined;
   await user.save();
   sendToken(user, 200, res);
+});
+
+// Admin routes
+
+// @desc    Get all users
+// @route   GET /api/v1/admin/users
+// @access  private
+
+exports.allUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find();
+  res.status(200).json({ success: true, data: users });
+});
+
+// @desc    Get indivisual user details
+// @route   GET /api/v1/admin/users/:id
+// @access  private
+
+exports.getUserDetails = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(
+      new ErrorHandler(`User does not found with id ${req.params.id}`, 404)
+    );
+  }
+  res.status(200).json({ success: true, data: user });
+});
+
+// @desc    Update user profile
+// @route   PUT /api/v1/admin/user/:id
+// @access  private
+
+exports.updateUser = asyncHandler(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+  // Update avatar : TODO
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+  res.status(200).json({ sucess: true, data: user });
+});
+
+// @desc    Delete user
+// @route   DELETE /api/v1/admin/user/:id
+// @access  private
+
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(
+      new ErrorHandler(`User does not found with id ${req.params.id}`, 404)
+    );
+  }
+  // Remove avatar from cloudinary - TODO
+  await user.remove();
+  res.status(200).json({ success: true, data: {} });
 });
