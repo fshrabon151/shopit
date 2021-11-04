@@ -40,6 +40,7 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/admin/products
 // @access  Private
 exports.createProduct = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user.id;
   const product = await Product.create(req.body);
   res.status(201).json({ success: true, data: product });
 });
