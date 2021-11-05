@@ -6,10 +6,19 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  createOrUpdateProductReview,
+  getProductReviews,
+  deleteReview,
 } = require('../controllers/products');
 
 const { isAuthenticatedUser, authorizedRoles } = require('../middlewares/auth');
 
+router.route('/review').put(isAuthenticatedUser, createOrUpdateProductReview);
+
+router
+  .route('/reviews')
+  .get(isAuthenticatedUser, getProductReviews)
+  .delete(isAuthenticatedUser, deleteReview);
 router.route('/products').get(getProducts);
 router.route('/products/:id').get(getProduct);
 router
