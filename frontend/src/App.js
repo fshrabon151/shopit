@@ -20,6 +20,7 @@ import Shipping from './components/cart/Shipping';
 import ConfirmOrder from './components/cart/ConfirmOrder';
 import Payment from './components/cart/Payment';
 import OrderSuccess from './components/cart/OrderSuccess';
+import ListOrders from './components/order/ListOrders';
 
 function App() {
   useEffect(() => {
@@ -67,6 +68,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Shipping />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/me"
+              element={
+                <ProtectedRoute>
+                  <ListOrders />
                 </ProtectedRoute>
               }
             />
