@@ -6,7 +6,9 @@ import CheckoutSteps from './CheckoutSteps';
 import { useAlert } from 'react-alert';
 import axios from 'axios';
 import { createOrder, clearErrors } from '../../redux/actions/order';
+
 import { v4 as uuidv4 } from 'uuid';
+import { clearCart } from '../../redux/actions/cart';
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -95,8 +97,20 @@ const Payment = () => {
       };
       dispatch(createOrder(order));
       localStorage.removeItem('tran_id');
+
+      dispatch(clearCart());
+
       navigate('/success');
-    } else if (success === 'fail') {
+    } else if (
+      success === 'fail' &&
+      tran_id === JSON.parse(localStorage.getItem('tran_id'))
+    ) {
+      order.paymentInfo = {
+        id: tran_id,
+        status,
+      };
+      dispatch(createOrder(order));
+      localStorage.removeItem('tran_id');
       alert.error('Transaction failed, Try again later');
     }
     if (error) {

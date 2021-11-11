@@ -19,11 +19,11 @@ const ProductDetails = () => {
 
   useEffect(() => {
     dispatch(getProduct(id));
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-  }, [dispatch, error, alert, id]);
+  }, [dispatch, id]);
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const increseQuantity = () => {
     const count = document.querySelector('.count');

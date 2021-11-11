@@ -66,7 +66,7 @@ const ListOrders = () => {
             <p className="text-danger">{order.orderStatus}</p>
           ),
         actions: (
-          <Link to={`/order/${order._id}`} className="btn btn-primary">
+          <Link to={`/orders/${order._id}`} className="btn btn-primary">
             {' '}
             <i className="fa fa-eye"></i>{' '}
           </Link>

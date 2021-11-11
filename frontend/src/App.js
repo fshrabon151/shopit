@@ -21,6 +21,7 @@ import ConfirmOrder from './components/cart/ConfirmOrder';
 import Payment from './components/cart/Payment';
 import OrderSuccess from './components/cart/OrderSuccess';
 import ListOrders from './components/order/ListOrders';
+import OrderDetails from './components/order/OrderDetails';
 
 function App() {
   useEffect(() => {
@@ -72,10 +73,18 @@ function App() {
               }
             />
             <Route
-              path="/orders/me"
+              path="/orders"
               element={
                 <ProtectedRoute>
                   <ListOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
                 </ProtectedRoute>
               }
             />
@@ -97,7 +106,7 @@ function App() {
             />
             <Route path="/password/forgot" element={<ForgotPassword />} />
             <Route path="/password/reset/:token" element={<ResetPassword />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
           </Routes>
         </div>
 
