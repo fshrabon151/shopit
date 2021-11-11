@@ -103,7 +103,8 @@ const Payment = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [alert, dispatch, error, navigate, order, status, success, tran_id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alert, dispatch, error, navigate, status, success, tran_id]);
 
   return (
     <>

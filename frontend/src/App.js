@@ -19,6 +19,7 @@ import Cart from './components/cart/Cart';
 import Shipping from './components/cart/Shipping';
 import ConfirmOrder from './components/cart/ConfirmOrder';
 import Payment from './components/cart/Payment';
+import OrderSuccess from './components/cart/OrderSuccess';
 
 function App() {
   useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/success" element={<OrderSuccess />} />
 
             <Route
               path="/me"
