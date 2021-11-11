@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { authReducer, userReducer, forgotPasswordReducer } from './auth';
 import { cartReducer } from './cart';
-import { newOrderReducer } from './order';
+import { newOrderReducer, myOrdersReducer } from './order';
 import { productReducer, productDetailsReducer } from './products';
 
 export default combineReducers({
@@ -12,4 +12,5 @@ export default combineReducers({
   forgotPassword: forgotPasswordReducer,
   cart: cartReducer,
   newOrder: newOrderReducer,
+  myOrders: myOrdersReducer,
 });
