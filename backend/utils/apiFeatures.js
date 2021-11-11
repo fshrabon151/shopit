@@ -1,37 +1,42 @@
 class APIFeatures {
-  constructor(query, queryString) {
+  constructor(query, queryStr) {
     this.query = query;
-    this.queryString = queryString;
+    this.queryStr = queryStr;
   }
+
   search() {
-    const search = this.queryString.search
+    const keyword = this.queryStr.keyword
       ? {
           name: {
-            $regex: this.queryString.search,
+            $regex: this.queryStr.keyword,
             $options: 'i',
           },
         }
       : {};
 
-    this.query = this.query.find({ ...search });
+    this.query = this.query.find({ ...keyword });
     return this;
   }
+
   filter() {
     const queryCopy = { ...this.queryStr };
 
     // Removing fields from the query
-    const removeFields = ['search', 'limit', 'page'];
+    const removeFields = ['keyword', 'limit', 'page'];
     removeFields.forEach((el) => delete queryCopy[el]);
+
     // Advance filter for price, ratings etc
     let queryStr = JSON.stringify(queryCopy);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
 
   pagination(resPerPage) {
-    const currentPage = Number(this.query.page) || 1;
+    const currentPage = Number(this.queryStr.page) || 1;
     const skip = resPerPage * (currentPage - 1);
+
     this.query = this.query.limit(resPerPage).skip(skip);
     return this;
   }

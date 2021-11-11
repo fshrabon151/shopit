@@ -4,19 +4,26 @@ const asyncHandler = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
+const cloudinary = require('cloudinary');
 
 // @desc    Register an user
 // @route   POST /api/v1/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
+  const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: 'avatars',
+    width: 250,
+    crop: 'scale',
+  });
+
   const { name, email, password } = req.body;
   const user = await User.create({
     name,
     email,
     password,
     avatar: {
-      public_id: 'avatars/avatar.75901876_nsv6wx',
-      url: 'https://res.cloudinary.com/fshrabon/image/upload/v1636005095/avatars/avatar.75901876_nsv6wx.png',
+      public_id: result.public_id,
+      url: result.secure_url,
     },
   });
   sendToken(user, 200, res);
@@ -49,7 +56,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access  private
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  res.status(200).json({ success: true, data: user });
+  res.status(200).json({ success: true, user });
 });
 
 // @desc    Update/Change password
@@ -77,13 +84,28 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
   };
-  // Update avatar : TODO
+  // Update avatar
+  if (req.body.avatar !== '') {
+    const user = await User.findById(req.user.id);
+    const image_id = user.avatar.public_id;
+    const res = await cloudinary.v2.uploader.destroy(image_id);
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: 'avatars',
+      width: 250,
+      crop: 'scale',
+    });
+
+    newUserData.avatar = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
   });
-  res.status(200).json({ sucess: true, data: user });
+  res.status(200).json({ success: true, data: user });
 });
 
 // @desc    logout user
@@ -109,9 +131,10 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
   // Create reset password url
-  const resetUrl = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/password/reset/${resetToken}`;
+  // const resetUrl = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/api/v1/password/reset/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = `Your password reset as follows: \n\n ${resetUrl} \nToken will be expires within ${process.env.RESET_PASSWORD_TOKEN_EXPIRES} mins, If you have not requested this email, then ignore it`;
 
@@ -123,7 +146,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     });
     res
       .status(200)
-      .json({ success: true, data: `Email sent to : ${user.email}` });
+      .json({ success: true, message: `Email sent to : ${user.email}` });
   } catch (error) {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;

@@ -1,7 +1,8 @@
 const app = require('./app');
-const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cloudinary = require('cloudinary');
 
 // Handle the uncaught exception
 process.on('uncaughtException', (err) => {
@@ -10,8 +11,12 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-// Setting up config files
-dotenv.config({ path: 'backend/config/config.env' });
+// Setting up cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 if (process.env.NODE_ENV === 'DEVELOPMENT') {
   // Dev logging middleware

@@ -8,17 +8,24 @@ const APIFeatures = require('../utils/apiFeatures');
 // @access  Public
 exports.getProducts = asyncHandler(async (req, res, next) => {
   const resPerPage = 4;
-  const productCount = await Product.countDocuments();
+  const productsCount = await Product.countDocuments();
+
   const apiFeatures = new APIFeatures(Product.find(), req.query)
     .search()
-    .filter()
-    .pagination(resPerPage);
-  const products = await apiFeatures.query;
+    .filter();
+
+  let products = apiFeatures.query;
+
+  apiFeatures.pagination(resPerPage);
+  products = await apiFeatures.query;
+  let filteredProductsCount = products.length;
+
   res.status(200).json({
     success: true,
-    productCount,
-    count: products.length,
-    data: products,
+    productsCount,
+    resPerPage,
+    filteredProductsCount,
+    products,
   });
 });
 
@@ -32,7 +39,7 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    data: product,
+    product,
   });
 });
 
