@@ -29,6 +29,17 @@ exports.getProducts = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get all products to admin
+// @route   GET /api/v1/admin/products
+// @access  private
+exports.getAdminProducts = asyncHandler(async (req, res, next) => {
+  const products = await Product.find();
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 // @desc    Get all products
 // @route   GET /api/v1/products/:id
 // @access  Public

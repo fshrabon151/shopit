@@ -29,6 +29,7 @@ import OrderDetails from './components/order/OrderDetails';
 
 // Admin Imports
 import Dashboard from './components/admin/Dashboard';
+import ProductsList from './components/admin/ProductsList';
 
 function App() {
   useEffect(() => {
@@ -124,6 +125,14 @@ function App() {
             element={
               <AdminRoutes>
                 <Dashboard />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/products"
+            element={
+              <AdminRoutes>
+                <ProductsList />
               </AdminRoutes>
             }
           />

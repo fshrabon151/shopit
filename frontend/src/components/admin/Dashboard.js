@@ -3,10 +3,28 @@ import { Link } from 'react-router-dom';
 import Loader from '../layouts/Loader';
 import MetaData from '../layouts/MetaData';
 import Sidebar from './Sidebar';
+import { getAdminProducts, clearErrors } from '../../redux/actions/products';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAlert } from 'react-alert';
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const alert = useAlert();
+  const { products } = useSelector((state) => state.products);
+
+  let outOfStock = 0;
+  products.forEach((product) => {
+    if (product.stock === 0) {
+      outOfStock++;
+    }
+  });
+
+  useEffect(() => {
+    dispatch(getAdminProducts());
+  }, [dispatch]);
   return (
     <>
+      <MetaData title="Dashboard" />
       <div className="row">
         <div className="col-12 col-md-2">
           <Sidebar />
@@ -34,7 +52,7 @@ const Dashboard = () => {
                   <div className="text-center card-font-size">
                     Products
                     <br />
-                    <b>56</b>
+                    <b>{products && products.length}</b>
                   </div>
                 </div>
                 <Link
@@ -97,7 +115,7 @@ const Dashboard = () => {
                   <div className="text-center card-font-size">
                     Out of Stock
                     <br />
-                    <b>4</b>
+                    <b>{outOfStock}</b>
                   </div>
                 </div>
               </div>
