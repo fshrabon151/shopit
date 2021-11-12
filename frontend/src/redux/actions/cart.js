@@ -3,7 +3,7 @@ import {
   ADD_TO_CART,
   REMOVE_ITEM_CART,
   SAVE_SHIPPING_INFO,
-  CLEAR_CART,
+  RESET_CART,
 } from './types';
 
 // Add item to cart
@@ -37,7 +37,7 @@ export const removeFromCart = (id) => async (dispatch, getState) => {
 // Remove item from cart
 export const clearCart = () => async (dispatch, getState) => {
   dispatch({
-    type: CLEAR_CART,
+    type: RESET_CART,
   });
   localStorage.removeItem('cartItems');
 };
