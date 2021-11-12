@@ -6,12 +6,14 @@ import {
   productReducer,
   productDetailsReducer,
   newReviewReducer,
+  newProductReducer,
 } from './products';
 
 export default combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
   newReview: newReviewReducer,
+  newProduct: newProductReducer,
   auth: authReducer,
   user: userReducer,
   forgotPassword: forgotPasswordReducer,
