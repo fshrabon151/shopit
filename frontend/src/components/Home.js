@@ -93,7 +93,7 @@ const Home = () => {
                       <div className="mt-5">
                         <h4 className="mb-3">Categories</h4>
                         <ul className="pl-0">
-                          {categories.map((item) => (
+                          {categories.sort().map((item) => (
                             <li
                               style={{
                                 cursor: 'pointer',
