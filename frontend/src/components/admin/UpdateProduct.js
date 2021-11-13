@@ -1,38 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import MetaData from '../layouts/MetaData';
 import Sidebar from './Sidebar';
-import { newProduct, clearErrors } from '../../redux/actions/products';
+import {
+  updateProduct,
+  getProduct,
+  clearErrors,
+} from '../../redux/actions/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { NEW_PRODUCT_RESET } from '../../redux/actions/types';
+import {
+  UPDATE_PRODUCT_RESET,
+  PRODUCT_DETAILS_RESET,
+} from '../../redux/actions/types';
 
-const NewProduct = () => {
+const UpdateProduct = () => {
+  const { error, product } = useSelector((state) => state.productDetails);
+  const { id } = useParams();
   const navigate = useNavigate();
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, error, success } = useSelector((state) => state.newProduct);
-  const [name, setName] = useState('');
+  const [name, setName] = useState();
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [stock, setStock] = useState(0);
   const [seller, setSeller] = useState('');
   const [images, setImages] = useState([]);
+  const [oldImages, setOldImages] = useState([]);
   const [imagesPriview, setImagesPriview] = useState([]);
 
-  useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-    if (success) {
-      navigate('/admin/products');
-      alert.success('Product added successfully');
-      dispatch({ type: NEW_PRODUCT_RESET });
-    }
-  }, [alert, dispatch, error, navigate, success]);
+  const {
+    error: updateError,
+    isUpdated,
+    loading,
+  } = useSelector((state) => state.product);
 
   const categories = [
     'Electronics',
@@ -49,6 +52,35 @@ const NewProduct = () => {
     'Home',
   ];
 
+  useEffect(() => {
+    if (product && product._id !== id) {
+      dispatch(getProduct(id));
+    } else {
+      setName(product.name);
+      setPrice(product.price);
+      setDescription(product.description);
+      setCategory(product.category);
+      setSeller(product.seller);
+      setStock(product.stock);
+      setOldImages(product.images);
+    }
+  }, [dispatch, id, product]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
+  if (updateError) {
+    alert.error(updateError);
+    dispatch(clearErrors());
+  }
+  if (isUpdated) {
+    navigate('/admin/products');
+    alert.success('Product updated successfully');
+    dispatch({ type: UPDATE_PRODUCT_RESET });
+    dispatch({ type: PRODUCT_DETAILS_RESET });
+  }
+
   const submitHandler = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -63,13 +95,14 @@ const NewProduct = () => {
       formData.append('images', image);
     });
 
-    dispatch(newProduct(formData));
+    dispatch(updateProduct(id, formData));
   };
 
   const onChange = (e) => {
     const files = Array.from(e.target.files);
     setImagesPriview([]);
     setImages([]);
+    setOldImages([]);
     files.forEach((file) => {
       const reader = new FileReader();
 
@@ -86,7 +119,7 @@ const NewProduct = () => {
 
   return (
     <>
-      <MetaData title="New Product" />
+      <MetaData title="Update Product" />
       <div className="row">
         <div className="col-12 col-md-2">
           <Sidebar />
@@ -99,7 +132,7 @@ const NewProduct = () => {
                 enctype="multipart/form-data"
                 onSubmit={submitHandler}
               >
-                <h1 className="mb-4">New Product</h1>
+                <h1 className="mb-4">Update Product</h1>
 
                 <div className="form-group">
                   <label for="name_field">Name</label>
@@ -187,6 +220,19 @@ const NewProduct = () => {
                       Choose Images
                     </label>
                   </div>
+
+                  {oldImages &&
+                    oldImages.map((image) => (
+                      <img
+                        src={image.url}
+                        key={image.url}
+                        alt={image.url}
+                        className="mt-3 mr-2"
+                        width="55"
+                        height="52"
+                      />
+                    ))}
+
                   {imagesPriview.map((image) => (
                     <img
                       src={image}
@@ -205,7 +251,7 @@ const NewProduct = () => {
                   className="btn btn-block py-3"
                   disabled={loading ? true : false}
                 >
-                  CREATE
+                  UPDATE
                 </button>
               </form>
             </div>
@@ -216,4 +262,4 @@ const NewProduct = () => {
   );
 };
 
-export default NewProduct;
+export default UpdateProduct;

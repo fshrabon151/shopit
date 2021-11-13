@@ -8,7 +8,7 @@ import {
 import Loader from '../layouts/Loader';
 import MetaData from '../layouts/MetaData';
 import { useAlert } from 'react-alert';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Carousel } from 'react-bootstrap';
 import { addItemToCart } from '../../redux/actions/cart';
 import { NEW_REVIEW_RESET } from '../../redux/actions/types';
@@ -18,6 +18,7 @@ const ProductDetails = () => {
   const { loading, product, error } = useSelector(
     (state) => state.productDetails
   );
+
   const { user } = useSelector((state) => state.auth);
   const alert = useAlert();
   const { id } = useParams();
@@ -131,7 +132,17 @@ const ProductDetails = () => {
               </div>
 
               <div className="col-12 col-lg-5 mt-5">
-                <h3>{product.name}</h3>
+                <h3>
+                  {product.name}{' '}
+                  {user && user.role === 'admin' && (
+                    <Link
+                      to={`/admin/products/${product._id}`}
+                      className="btn btn-primary float-right py-1 px-2"
+                    >
+                      <i className="fa fa-pencil"></i> Edit
+                    </Link>
+                  )}
+                </h3>
                 <p id="product_id">Product #{product._id}</p>
 
                 <hr />

@@ -8,6 +8,7 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
+  PRODUCT_DETAILS_RESET,
   NEW_PRODUCT_REQUEST,
   NEW_PRODUCT_SUCCESS,
   NEW_PRODUCT_RESET,
@@ -16,6 +17,10 @@ import {
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_RESET,
   DELETE_PRODUCT_FAIL,
+  UPDATE_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_SUCCESS,
+  UPDATE_PRODUCT_RESET,
+  UPDATE_PRODUCT_FAIL,
   NEW_REVIEW_REQUEST,
   NEW_REVIEW_SUCCESS,
   NEW_REVIEW_RESET,
@@ -62,7 +67,7 @@ export const productReducer = (state = { products: [] }, action) => {
   }
 };
 
-export const productDetailsReducer = (state = { product: null }, action) => {
+export const productDetailsReducer = (state = { product: {} }, action) => {
   const { type, payload } = action;
   switch (type) {
     case PRODUCT_DETAILS_REQUEST:
@@ -79,6 +84,11 @@ export const productDetailsReducer = (state = { product: null }, action) => {
       return {
         loading: false,
         error: payload,
+      };
+    case PRODUCT_DETAILS_RESET:
+      return {
+        ...state,
+        product: {},
       };
     case CLEAR_ERRORS:
       return {
@@ -129,6 +139,7 @@ export const productDeleteOrUpdateReducer = (
 ) => {
   switch (action.type) {
     case DELETE_PRODUCT_REQUEST:
+    case UPDATE_PRODUCT_REQUEST:
       return {
         ...state,
         loading: true,
@@ -139,7 +150,14 @@ export const productDeleteOrUpdateReducer = (
         loading: false,
         isDeleted: action.payload,
       };
+    case UPDATE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdated: action.payload,
+      };
     case DELETE_PRODUCT_FAIL:
+    case UPDATE_PRODUCT_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -148,6 +166,11 @@ export const productDeleteOrUpdateReducer = (
       return {
         ...state,
         isDeleted: false,
+      };
+    case UPDATE_PRODUCT_RESET:
+      return {
+        ...state,
+        isUpdated: false,
       };
     case CLEAR_ERRORS:
       return {

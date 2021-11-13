@@ -43,6 +43,7 @@ const Home = () => {
     resPerPage,
     filteredProductsCount,
   } = useSelector((state) => state.products);
+
   const { keyword } = useParams();
   if (!keyword) {
   }

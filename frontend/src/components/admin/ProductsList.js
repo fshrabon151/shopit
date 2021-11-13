@@ -51,9 +51,15 @@ const ProductsList = () => {
           field: 'id',
           sort: 'asc',
         },
+
         {
           label: 'Name',
           field: 'name',
+          sort: 'asc',
+        },
+        {
+          label: 'Image',
+          field: 'image',
           sort: 'asc',
         },
         {
@@ -61,11 +67,13 @@ const ProductsList = () => {
           field: 'price',
           sort: 'asc',
         },
+
         {
           label: 'Stock',
           field: 'stock',
           sort: 'asc',
         },
+
         {
           label: 'Actions',
           field: 'actions',
@@ -77,13 +85,18 @@ const ProductsList = () => {
     products.forEach((product) => {
       data.rows.push({
         id: product._id,
+
         name: product.name,
+        image: (
+          <img src={product.images[0].url} alt={product.name} width="50" />
+        ),
         price: `$${product.price}`,
         stock: (
           <b className={product.stock > 0 ? 'text-success' : 'text-danger'}>
             {product.stock}
           </b>
         ),
+
         actions: (
           <>
             <Link

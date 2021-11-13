@@ -25,7 +25,7 @@ const Product = ({ product, col }) => {
           </div>
           <p className="card-text">${product.price}</p>
           <Link
-            to={`/product/${product._id}`}
+            to={`/products/${product._id}`}
             id="view_btn"
             className="btn btn-block"
           >

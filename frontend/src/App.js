@@ -33,6 +33,7 @@ import OrderDetails from './components/order/OrderDetails';
 import Dashboard from './components/admin/Dashboard';
 import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
+import UpdateProduct from './components/admin/UpdateProduct';
 
 function App() {
   const { loading, user } = useSelector((state) => state.auth);
@@ -149,9 +150,17 @@ function App() {
               </AdminRoutes>
             }
           />
+          <Route
+            path="admin/products/:id"
+            element={
+              <AdminRoutes>
+                <UpdateProduct />
+              </AdminRoutes>
+            }
+          />
         </Routes>
 
-        {!loading && user.role !== 'admin' && <Footer />}
+        {!loading && user && user.role !== 'admin' && <Footer />}
       </div>
     </BrowserRouter>
   );
