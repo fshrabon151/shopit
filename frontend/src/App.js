@@ -1,9 +1,11 @@
 import './App.css';
+
 import { useEffect } from 'react';
 import Home from './components/Home';
 import Footer from './components/layouts/Footer';
 import Header from './components/layouts/Header';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import store from './redux/store';
 import ProductDetails from './components/product/ProductDetails';
 // Auth or User Imports
@@ -33,6 +35,7 @@ import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 
 function App() {
+  const { loading, user } = useSelector((state) => state.auth);
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
@@ -148,7 +151,7 @@ function App() {
           />
         </Routes>
 
-        <Footer />
+        {!loading && user.role !== 'admin' && <Footer />}
       </div>
     </BrowserRouter>
   );

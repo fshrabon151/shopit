@@ -20,7 +20,7 @@ const NewProduct = () => {
       dispatch(clearErrors());
     }
     if (success) {
-      navigate('admin/products');
+      navigate('/admin/products');
       alert.success('Product added successfully');
       dispatch({ type: NEW_PRODUCT_RESET });
     }
