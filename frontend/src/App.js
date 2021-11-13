@@ -34,6 +34,7 @@ import Dashboard from './components/admin/Dashboard';
 import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 import UpdateProduct from './components/admin/UpdateProduct';
+import OrderList from './components/admin/OrderList';
 
 function App() {
   const { loading, user } = useSelector((state) => state.auth);
@@ -143,7 +144,7 @@ function App() {
           />
 
           <Route
-            path="admin/product"
+            path="/admin/product"
             element={
               <AdminRoutes>
                 <NewProduct />
@@ -151,16 +152,24 @@ function App() {
             }
           />
           <Route
-            path="admin/products/:id"
+            path="/admin/products/:id"
             element={
               <AdminRoutes>
                 <UpdateProduct />
               </AdminRoutes>
             }
           />
+          <Route
+            path="/admin/orders"
+            element={
+              <AdminRoutes>
+                <OrderList />
+              </AdminRoutes>
+            }
+          />
         </Routes>
 
-        {!loading && user && user.role !== 'admin' && <Footer />}
+        {!loading && user && user.role === 'admin' ? <></> : <Footer />}
       </div>
     </BrowserRouter>
   );

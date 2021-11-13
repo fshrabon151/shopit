@@ -4,10 +4,10 @@ import { Navigate } from 'react-router-dom';
 import Loader from '../layouts/Loader';
 
 const ProtectedRoute = ({ children }) => {
-  const { loading, isAuthenticated, user } = useSelector((state) => state.auth);
+  const { loading, isAuthenticated } = useSelector((state) => state.auth);
   return loading ? (
     <Loader />
-  ) : isAuthenticated && user.role !== 'admin' ? (
+  ) : isAuthenticated ? (
     children
   ) : (
     <Navigate to="/login" />

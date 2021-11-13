@@ -46,6 +46,7 @@ const ProductDetails = () => {
 
   if (success) {
     alert.success('Review posted successfully');
+    dispatch(getProduct(id));
     dispatch({ type: NEW_REVIEW_RESET });
   }
 
