@@ -133,10 +133,7 @@ export const newProductReducer = (state = { product: {} }, action) => {
   }
 };
 
-export const productDeleteOrUpdateReducer = (
-  state = { product: {} },
-  action
-) => {
+export const productDeleteOrUpdateReducer = (state = {}, action) => {
   switch (action.type) {
     case DELETE_PRODUCT_REQUEST:
     case UPDATE_PRODUCT_REQUEST:

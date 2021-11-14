@@ -35,9 +35,12 @@ import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 import UpdateProduct from './components/admin/UpdateProduct';
 import OrderList from './components/admin/OrderList';
+import ProcessOrder from './components/admin/ProcessOrder';
+import UsersList from './components/admin/UsersList';
+import UpdateUser from './components/admin/UpdateUser';
 
 function App() {
-  const { loading, user } = useSelector((state) => state.auth);
+  const { loading, user, isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
@@ -167,9 +170,34 @@ function App() {
               </AdminRoutes>
             }
           />
+          <Route
+            path="/admin/orders/:orderId"
+            element={
+              <AdminRoutes>
+                <ProcessOrder />
+              </AdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoutes>
+                <UsersList />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/users/:id"
+            element={
+              <AdminRoutes>
+                <UpdateUser />
+              </AdminRoutes>
+            }
+          />
         </Routes>
 
-        {!loading && user && user.role === 'admin' ? <></> : <Footer />}
+        {!loading && (!isAuthenticated || user.role !== 'admin') && <Footer />}
       </div>
     </BrowserRouter>
   );

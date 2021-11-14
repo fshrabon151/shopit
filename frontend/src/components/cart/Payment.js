@@ -40,7 +40,7 @@ const Payment = () => {
   }
 
   const submitHandler = async (e) => {
-    const tran_id = `shopit-${uuidv4()}`;
+    const tran_id = uuidv4();
     localStorage.setItem('tran_id', JSON.stringify(tran_id));
     e.preventDefault();
     try {

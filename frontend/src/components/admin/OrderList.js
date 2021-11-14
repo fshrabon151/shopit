@@ -7,21 +7,42 @@ import { MDBDataTable } from 'mdbreact';
 import Loader from '../layouts/Loader';
 import { useAlert } from 'react-alert';
 import Sidebar from './Sidebar';
-import { getAllOrders, clearErrors } from '../../redux/actions/order';
+import {
+  getAllOrders,
+  clearErrors,
+  deleteOrder,
+} from '../../redux/actions/order';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { DELETE_ORDERS_RESET } from '../../redux/actions/types';
 
 const OrderList = () => {
   const navigate = useNavigate();
   const alert = useAlert();
   const dispatch = useDispatch();
   const { loading, error, orders } = useSelector((state) => state.allOrders);
+  const { isDeleted, error: orderDeleteError } = useSelector(
+    (state) => state.order
+  );
 
   useEffect(() => {
     dispatch(getAllOrders());
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
+    if (isDeleted) {
+      alert.success('Order deleted successfully');
+
+      navigate('/admin/orders');
+      dispatch({ type: DELETE_ORDERS_RESET });
     }
-  }, [alert, dispatch, error, navigate]);
+  }, [dispatch, alert, isDeleted, navigate]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
+  if (orderDeleteError) {
+    alert.error(orderDeleteError);
+    dispatch(clearErrors());
+  }
 
   const setOrders = () => {
     const data = {
@@ -73,8 +94,10 @@ const OrderList = () => {
           order.orderStatus &&
           String(order.orderStatus).includes('Delivered') ? (
             <p className="text-success">{order.orderStatus}</p>
+          ) : String(order.orderStatus).includes('Shipped') ? (
+            <p className="text-warning">{order.orderStatus}</p>
           ) : (
-            <p className="text-danger">{order.orderStatus}</p>
+            <p className="text-primary">{order.orderStatus}</p>
           ),
         actions: (
           <>
@@ -87,7 +110,7 @@ const OrderList = () => {
             </Link>
             <button
               className="btn btn-danger py-1 px-2 ml-2"
-              //   onClick={() => deleteOrderHandler(order._id)}
+              onClick={() => deleteOrderHandler(order._id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -97,9 +120,25 @@ const OrderList = () => {
     });
     return data;
   };
+
+  const deleteOrderHandler = (id) => {
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => dispatch(deleteOrder(id)),
+        },
+        {
+          label: 'No',
+        },
+      ],
+    });
+  };
   return (
     <>
-      <MetaData title="All Products" />
+      <MetaData title="All orders" />
       <div className="row">
         <div className="col-12 col-md-2">
           <Sidebar />

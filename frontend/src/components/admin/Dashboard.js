@@ -7,12 +7,18 @@ import { getAdminProducts, clearErrors } from '../../redux/actions/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { getAllOrders } from '../../redux/actions/order';
+import { getAllUser } from '../../redux/actions/auth';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const { products, loading } = useSelector((state) => state.products);
-  const { orders, totalAmount } = useSelector((state) => state.allOrders);
+  const { users } = useSelector((state) => state.allUsers);
+  const {
+    orders,
+    totalAmount,
+    loading: orderLoading,
+  } = useSelector((state) => state.allOrders);
 
   let outOfStock = 0;
   products.forEach((product) => {
@@ -22,8 +28,9 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    dispatch(getAdminProducts());
+    dispatch(getAllUser());
     dispatch(getAllOrders());
+    dispatch(getAdminProducts());
   }, [dispatch]);
   return (
     <>
@@ -101,7 +108,7 @@ const Dashboard = () => {
                       <div className="text-center card-font-size">
                         Users
                         <br />
-                        <b>45</b>
+                        <b>{users && users.length}</b>
                       </div>
                     </div>
                     <Link

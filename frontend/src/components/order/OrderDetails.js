@@ -64,7 +64,9 @@ const OrderDetails = () => {
                     order.orderStatus &&
                     String(order.orderStatus).includes('Delivered')
                       ? 'greenColor'
-                      : 'redColor'
+                      : String(order.orderStatus).includes('Shipped')
+                      ? 'text-warning'
+                      : 'text-primary'
                   }
                 >
                   <b>{order.orderStatus}</b>
