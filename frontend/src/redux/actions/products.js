@@ -21,33 +21,36 @@ import {
   NEW_REVIEW_REQUEST,
   NEW_REVIEW_SUCCESS,
   NEW_REVIEW_FAIL,
+  GET_REVIEW_REQUEST,
+  GET_REVIEW_SUCCESS,
+  GET_REVIEW_FAIL,
   CLEAR_ERRORS,
 } from './types';
 
 // Get all the products
 export const getProducts =
   (keyword = '', currentPage = 1, price, category, rating = 0) =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: ALL_PRODUCT_REQUEST });
+    async (dispatch) => {
+      try {
+        dispatch({ type: ALL_PRODUCT_REQUEST });
 
-      let link = `/api/v1/products?page=${currentPage}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
-      if (keyword && category) {
-        link = `/api/v1/products?page=${currentPage}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+        let link = `/api/v1/products?page=${currentPage}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
+        if (keyword && category) {
+          link = `/api/v1/products?page=${currentPage}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+        }
+
+        const { data } = await axios.get(link);
+        dispatch({
+          type: ALL_PRODUCT_SUCCESS,
+          payload: data,
+        });
+      } catch (error) {
+        dispatch({
+          type: ALL_PRODUCT_FAIL,
+          payload: error.response.data.message,
+        });
       }
-
-      const { data } = await axios.get(link);
-      dispatch({
-        type: ALL_PRODUCT_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: ALL_PRODUCT_FAIL,
-        payload: error.response.data.message,
-      });
-    }
-  };
+    };
 
 // Get all the products
 export const getAdminProducts = () => async (dispatch) => {
@@ -139,6 +142,24 @@ export const deleteProduct = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// Get products reviews
+export const getProductReviews = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_REVIEW_REQUEST });
+    const { data } = await axios.get(`/api/v1/reviews?id=${id}`);
+    dispatch({
+      type: GET_REVIEW_SUCCESS,
+      payload: data.reviews,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_REVIEW_FAIL,
       payload: error.response.data.message,
     });
   }

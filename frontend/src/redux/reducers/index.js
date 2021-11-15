@@ -20,13 +20,14 @@ import {
   newReviewReducer,
   newProductReducer,
   productDeleteOrUpdateReducer,
+  productReviewsReducer
 } from './products';
 
 export default combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
   newReview: newReviewReducer,
-  newProduct: newProductReducer,
+  productReviews: productReviewsReducer,
   product: productDeleteOrUpdateReducer,
   auth: authReducer,
   user: userReducer,

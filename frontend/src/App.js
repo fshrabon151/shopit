@@ -38,6 +38,8 @@ import OrderList from './components/admin/OrderList';
 import ProcessOrder from './components/admin/ProcessOrder';
 import UsersList from './components/admin/UsersList';
 import UpdateUser from './components/admin/UpdateUser';
+import ProductReviews from './components/admin/ProductReviews';
+
 
 function App() {
   const { loading, user, isAuthenticated } = useSelector((state) => state.auth);
@@ -192,6 +194,14 @@ function App() {
             element={
               <AdminRoutes>
                 <UpdateUser />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reviews"
+            element={
+              <AdminRoutes>
+                <ProductReviews />
               </AdminRoutes>
             }
           />
