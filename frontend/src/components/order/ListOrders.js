@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import MetaData from '../layouts/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,11 +15,12 @@ const ListOrders = () => {
 
   useEffect(() => {
     dispatch(myOrders());
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-  }, [alert, dispatch, error]);
+
+  }, [alert, dispatch]);
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const setOrders = () => {
     const data = {
@@ -60,7 +61,7 @@ const ListOrders = () => {
         amount: `$${order.totalPrice}`,
         status:
           order.orderStatus &&
-          String(order.orderStatus).includes('Delivered') ? (
+            String(order.orderStatus).includes('Delivered') ? (
             <p className="text-success">{order.orderStatus}</p>
           ) : (
             <p className="text-danger">{order.orderStatus}</p>

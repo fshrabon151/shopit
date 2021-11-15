@@ -17,8 +17,9 @@ import {
 import {
   productReducer,
   productDetailsReducer,
-  newReviewReducer,
   newProductReducer,
+  newReviewReducer,
+  reviewReducer,
   productDeleteOrUpdateReducer,
   productReviewsReducer
 } from './products';
@@ -26,8 +27,10 @@ import {
 export default combineReducers({
   products: productReducer,
   productDetails: productDetailsReducer,
+  newProduct: newProductReducer,
   newReview: newReviewReducer,
   productReviews: productReviewsReducer,
+  review: reviewReducer,
   product: productDeleteOrUpdateReducer,
   auth: authReducer,
   user: userReducer,

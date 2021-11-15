@@ -24,6 +24,9 @@ import {
   GET_REVIEW_REQUEST,
   GET_REVIEW_SUCCESS,
   GET_REVIEW_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
+  DELETE_REVIEW_FAIL,
   CLEAR_ERRORS,
 } from './types';
 
@@ -31,6 +34,7 @@ import {
 export const getProducts =
   (keyword = '', currentPage = 1, price, category, rating = 0) =>
     async (dispatch) => {
+
       try {
         dispatch({ type: ALL_PRODUCT_REQUEST });
 
@@ -85,6 +89,8 @@ export const getProduct = (id) => async (dispatch) => {
     });
   }
 };
+
+
 //  create review
 export const newReview = (reviewData) => async (dispatch) => {
   try {
@@ -142,6 +148,24 @@ export const deleteProduct = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Delete product review (admin)
+
+export const deleteReview = (productId, reviewId) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_REVIEW_REQUEST });
+    const { data } = await axios.delete(`/api/v1/reviews?productId=${productId}&id=${reviewId}`);
+    dispatch({
+      type: DELETE_REVIEW_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
       payload: error.response.data.message,
     });
   }

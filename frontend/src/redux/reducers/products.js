@@ -28,6 +28,10 @@ import {
   GET_REVIEW_REQUEST,
   GET_REVIEW_SUCCESS,
   GET_REVIEW_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
+  DELETE_REVIEW_RESET,
+  DELETE_REVIEW_FAIL,
   CLEAR_ERRORS,
 } from '../actions/types';
 
@@ -172,6 +176,42 @@ export const productDeleteOrUpdateReducer = (state = {}, action) => {
         ...state,
         isUpdated: false,
       };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const reviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_REVIEW_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_REVIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload,
+      };
+
+    case DELETE_REVIEW_FAIL:
+
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case DELETE_REVIEW_RESET:
+      return {
+        ...state,
+        isDeleted: false,
+      };
+
     case CLEAR_ERRORS:
       return {
         ...state,

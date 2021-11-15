@@ -22,23 +22,26 @@ const UsersList = () => {
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.user
   );
+  const { user: loginUser } = useSelector((state) => state.auth)
 
   useEffect(() => {
     dispatch(getAllUser());
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-    if (deleteError) {
-      alert.error(deleteError);
-      dispatch(clearErrors());
-    }
+
     if (isDeleted) {
       alert.success('user deleted successfully');
       navigate('/admin/users');
       dispatch({ type: DELETE_USER_RESET });
     }
-  }, [alert, dispatch, error, navigate, deleteError, isDeleted]);
+  }, [alert, dispatch, navigate, isDeleted]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
+  if (deleteError) {
+    alert.error(deleteError);
+    dispatch(clearErrors());
+  }
 
   const setUsers = () => {
     const data = {
@@ -90,21 +93,25 @@ const UsersList = () => {
         ),
 
         actions: (
-          <>
+          loginUser._id === user._id && user.role === 'admin' ? <button className="btn btn-primary btn-sm" disabled={true}>Your ID</button> : <>
             <Link
               to={`/admin/users/${user._id}`}
               className="btn btn-primary py-1 px-2"
+              disabled={loginUser._id === user._id ? true : false}
+
             >
-              {' '}
+
               <i className="fa fa-pencil"></i>
             </Link>
             <button
               className="btn btn-danger py-1 px-2 ml-2"
               onClick={() => deleteUserHandler(user._id)}
+              disabled={loginUser._id === user._id ? true : false}
             >
               <i className="fa fa-trash"></i>
             </button>
           </>
+
         ),
       });
     });

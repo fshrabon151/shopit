@@ -26,15 +26,17 @@ const Register = () => {
   );
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+
 
     if (isAuthenticated) {
       navigate('/');
     }
-  }, [dispatch, alert, error, isAuthenticated, navigate]);
+  }, [dispatch, alert, isAuthenticated, navigate]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -83,6 +85,7 @@ const Register = () => {
                 name="name"
                 value={name}
                 onChange={onChange}
+                required
               />
             </div>
 
@@ -95,6 +98,7 @@ const Register = () => {
                 name="email"
                 value={email}
                 onChange={onChange}
+                required
               />
             </div>
 
@@ -107,6 +111,7 @@ const Register = () => {
                 name="password"
                 value={password}
                 onChange={onChange}
+                required
               />
             </div>
 
@@ -130,6 +135,7 @@ const Register = () => {
                     accept="images/*"
                     id="customFile"
                     onChange={onChange}
+                    required
                   />
                   <label className="custom-file-label" htmlFor="customFile">
                     Choose Avatar

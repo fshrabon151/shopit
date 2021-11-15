@@ -6,7 +6,7 @@ import MetaData from '../layouts/MetaData';
 
 import {
   updateUser,
-  loadUser,
+
   getUserDetails,
   clearErrors,
 } from '../../redux/actions/auth';
@@ -15,7 +15,7 @@ import {
   USER_DETAILS_RESET,
 } from '../../redux/actions/types';
 import Sidebar from './Sidebar';
-import Loader from '../layouts/Loader';
+
 
 const UpdateUser = () => {
   const [name, setName] = useState('');

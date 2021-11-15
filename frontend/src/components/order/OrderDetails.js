@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import MetaData from '../layouts/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,11 +15,12 @@ const OrderDetails = () => {
 
   useEffect(() => {
     dispatch(getOrderDetails(id));
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-  }, [alert, dispatch, error, id]);
+
+  }, [alert, dispatch, id]);
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const isPaid =
     order && order.paymentInfo.status === 'succeeded' ? true : false;
@@ -62,11 +63,11 @@ const OrderDetails = () => {
                 <p
                   className={
                     order.orderStatus &&
-                    String(order.orderStatus).includes('Delivered')
+                      String(order.orderStatus).includes('Delivered')
                       ? 'greenColor'
                       : String(order.orderStatus).includes('Shipped')
-                      ? 'text-warning'
-                      : 'text-primary'
+                        ? 'text-warning'
+                        : 'text-primary'
                   }
                 >
                   <b>{order.orderStatus}</b>

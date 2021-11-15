@@ -13,14 +13,15 @@ const ForgotPassword = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+
     if (message) {
       alert.success(message);
     }
-  }, [alert, dispatch, error, message]);
+  }, [alert, dispatch, message]);
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();

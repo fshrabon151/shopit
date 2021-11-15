@@ -20,15 +20,16 @@ const Login = () => {
   );
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+
 
     if (isAuthenticated) {
       navigate(`/${redirect}`);
     }
-  }, [dispatch, alert, error, isAuthenticated, navigate, loading, redirect]);
+  }, [dispatch, alert, isAuthenticated, navigate, loading, redirect]);
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();

@@ -28,20 +28,22 @@ const ProductsList = () => {
 
   useEffect(() => {
     dispatch(getAdminProducts());
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-    if (deleteError) {
-      alert.error(deleteError);
-      dispatch(clearErrors());
-    }
+
     if (isDeleted) {
       alert.success('Product deleted successfully');
       navigate('/admin/products');
       dispatch({ type: DELETE_PRODUCT_RESET });
     }
-  }, [alert, dispatch, error, deleteError, isDeleted, navigate]);
+  }, [alert, dispatch, isDeleted, navigate]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
+  if (deleteError) {
+    alert.error(deleteError);
+    dispatch(clearErrors());
+  }
 
   const setProducts = () => {
     const data = {

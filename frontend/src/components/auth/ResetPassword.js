@@ -18,15 +18,17 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+
     if (success) {
       alert.success('Password has been updated successfully');
       navigate('/login');
     }
-  }, [alert, dispatch, error, success, navigate]);
+  }, [alert, dispatch, success, navigate]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();

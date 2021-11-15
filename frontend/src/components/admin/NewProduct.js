@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import MetaData from '../layouts/MetaData';
 import Sidebar from './Sidebar';
@@ -23,16 +23,18 @@ const NewProduct = () => {
   const [imagesPriview, setImagesPriview] = useState([]);
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+
     if (success) {
       navigate('/admin/products');
       alert.success('Product added successfully');
       dispatch({ type: NEW_PRODUCT_RESET });
     }
-  }, [alert, dispatch, error, navigate, success]);
+  }, [alert, dispatch, navigate, success]);
+
+  if (error) {
+    alert.error(error);
+    dispatch(clearErrors());
+  }
 
   const categories = [
     'Electronics',

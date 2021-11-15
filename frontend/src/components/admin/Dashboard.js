@@ -3,21 +3,21 @@ import { Link } from 'react-router-dom';
 import Loader from '../layouts/Loader';
 import MetaData from '../layouts/MetaData';
 import Sidebar from './Sidebar';
-import { getAdminProducts, clearErrors } from '../../redux/actions/products';
+import { getAdminProducts, } from '../../redux/actions/products';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAlert } from 'react-alert';
+
 import { getAllOrders } from '../../redux/actions/order';
 import { getAllUser } from '../../redux/actions/auth';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
+
   const { products, loading } = useSelector((state) => state.products);
   const { users } = useSelector((state) => state.allUsers);
   const {
     orders,
     totalAmount,
-    loading: orderLoading,
+
   } = useSelector((state) => state.allOrders);
 
   let outOfStock = 0;
