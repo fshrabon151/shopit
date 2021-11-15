@@ -9,7 +9,8 @@
     "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server",
     "frontend": "npm start --prefix frontend",
     "both": "concurrently \"npm run prod\" \"npm run frontend\"",
-    "seeder": "node backend/utils/seeder.js"
+    "seeder": "node backend/utils/seeder.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm start --prefix frontend && npm run build --prefix frontend"
   },
   "author": "F Shrabon",
   "license": "ISC",

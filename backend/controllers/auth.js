@@ -134,7 +134,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // const resetUrl = `${req.protocol}://${req.get(
   //   'host'
   // )}/api/v1/password/reset/${resetToken}`;
-  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+  const resetUrl = `${req.protocol}://${req.get('host')}password/reset/${resetToken}`;
 
   const message = `Your password reset as follows: \n\n ${resetUrl} \nToken will be expires within ${process.env.RESET_PASSWORD_TOKEN_EXPIRES} mins, If you have not requested this email, then ignore it`;
 
