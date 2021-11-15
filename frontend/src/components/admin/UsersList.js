@@ -3,20 +3,25 @@ import { Link, useNavigate } from 'react-router-dom';
 import MetaData from '../layouts/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 import { MDBDataTable } from 'mdbreact';
 import Loader from '../layouts/Loader';
 import { useAlert } from 'react-alert';
 import Sidebar from './Sidebar';
-import { getAllUser, clearErrors } from '../../redux/actions/auth';
+import { getAllUser, deleteUser, clearErrors } from '../../redux/actions/auth';
+import { DELETE_USER_RESET } from '../../redux/actions/types';
+
 
 const UsersList = () => {
   const navigate = useNavigate();
   const alert = useAlert();
   const dispatch = useDispatch();
   const { loading, error, users } = useSelector((state) => state.allUsers);
-  // const { error: deleteError, isDeleted } = useSelector(
-  //   (state) => state.user
-  // );
+  const { error: deleteError, isDeleted } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(getAllUser());
@@ -24,16 +29,16 @@ const UsersList = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-    // if (deleteError) {
-    //   alert.error(deleteError);
-    //   dispatch(clearErrors());
-    // }
-    // if (isDeleted) {
-    //   alert.success('user deleted successfully');
-    //   navigate('/admin/products');
-    //   dispatch({ type: DELETE_PRODUCT_RESET });
-    // }
-  }, [alert, dispatch, error, navigate]);
+    if (deleteError) {
+      alert.error(deleteError);
+      dispatch(clearErrors());
+    }
+    if (isDeleted) {
+      alert.success('user deleted successfully');
+      navigate('/admin/users');
+      dispatch({ type: DELETE_USER_RESET });
+    }
+  }, [alert, dispatch, error, navigate, deleteError, isDeleted]);
 
   const setUsers = () => {
     const data = {
@@ -77,7 +82,6 @@ const UsersList = () => {
     users.forEach((user) => {
       data.rows.push({
         id: user._id,
-
         name: user.name,
         email: user.email,
         role: user.role,
@@ -96,7 +100,7 @@ const UsersList = () => {
             </Link>
             <button
               className="btn btn-danger py-1 px-2 ml-2"
-              // onClick={() => deleteProductHandler(user._id)}
+              onClick={() => deleteUserHandler(user._id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -105,6 +109,21 @@ const UsersList = () => {
       });
     });
     return data;
+  };
+  const deleteUserHandler = (id) => {
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => dispatch(deleteUser(id)),
+        },
+        {
+          label: 'No',
+        },
+      ],
+    });
   };
   return (
     <>
