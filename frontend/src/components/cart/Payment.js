@@ -88,7 +88,7 @@ const Payment = () => {
 
   useEffect(() => {
     if (
-      success === 'true' &&
+      success && success === 'true' &&
       tran_id === JSON.parse(localStorage.getItem('tran_id'))
     ) {
       order.paymentInfo = {
@@ -97,12 +97,10 @@ const Payment = () => {
       };
       dispatch(createOrder(order));
       localStorage.removeItem('tran_id');
-
-      dispatch(clearCart());
-
       navigate('/success');
+      dispatch(clearCart());
     } else if (
-      success === 'fail' &&
+      success && success === 'fail' &&
       tran_id === JSON.parse(localStorage.getItem('tran_id'))
     ) {
       order.paymentInfo = {

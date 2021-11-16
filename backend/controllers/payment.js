@@ -23,26 +23,26 @@ exports.paymentSuccess = asyncHandler(async (req, res, next) => {
   const { tran_id, card_type, card_brand, status } = req.body;
 
   res.redirect(
-    `${req.protocol}://${req.get('host')}/order/payment/?success=true&status=succeeded&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
+    `${req.protocol === 'https' ? req.protocol : 'https'}://${req.get('host')}/order/payment/?success=true&status=succeeded&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
   );
 });
 
 exports.paymentFail = asyncHandler(async (req, res, next) => {
   const { tran_id, card_type, card_brand, status } = req.body;
   res.redirect(
-    `${req.protocol}://${req.get('host')}/order/payment/?success=fail&status=failed&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
+    `${req.protocol === 'https' ? req.protocol : 'https'}://${req.get('host')}/order/payment/?success=fail&status=failed&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
   );
 });
 exports.paymentCancel = asyncHandler(async (req, res, next) => {
   const { tran_id, card_type, card_brand, status } = req.body;
   res.redirect(
-    `${req.protocol}://${req.get('host')}/order/payment/?success=true&status=succeeded&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
+    `${req.protocol === 'https' ? req.protocol : 'https'}://${req.get('host')}/order/payment/?success=true&status=succeeded&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
   );
 });
 
 exports.paymentIpn = asyncHandler(async (req, res, next) => {
   const { tran_id, card_type, card_brand, status } = req.body;
   res.redirect(
-    `${req.protocol}://${req.get('host')}/order/payment/?success=true&status=succeeded&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
+    `${req.protocol === 'https' ? req.protocol : 'https'}://${req.get('host')}/order/payment/?success=true&status=succeeded&tran_id=${tran_id}&card_type=${card_type}&card_brand=${card_brand}`
   );
 });
